@@ -1,24 +1,24 @@
 @extends('backend.layouts.master')
 @section('title-1')
-	Products
+	Categories
 @endsection
 @section('title-header')
-	Products
+	Categories
 @endsection
 @section('title-header')
-	Products
+	Categories
 @endsection
 @section('card-content')
 	<!-- Content Header -->
 <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Danh sách sản phẩm</h1>
+                <h1 class="m-0 text-dark">Danh sách Danh mục</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+                    <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
                     <li class="breadcrumb-item active">Danh sách</li>
                 </ol>
             </div><!-- /.col -->
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Sản phẩm mới nhập</h3>
+                        <h3 class="card-title">Danh sách Danh mục</h3>
 
                         <div class="card-tools">
                             <div class="input-group input-group-sm" style="width: 150px;">
@@ -50,25 +50,26 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Thời gian</th>
-                                <th>Status</th>
-                                <th>Mô tả</th>
+                                <th>Name</th>
+                                <th>slug</th>
+                                <th>Parent ID</th>
+                                <th>Depth</th>
+
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach ($products as $product)
+                                @foreach ($categories as $category)
                                     <tr>
-                                        <td>{{ $product->id }}</td>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ $product->created_at }}</td>
-                                        <td><span class="tag tag-success">{{ $product->status }}</span></td>
-                                        <td>{{ $product->content }}</td>
+                                        <td>{{ $category->id }}</td>
+                                        <td>{{ $category->name }}</td>
+                                        <td><span class="tag tag-success">{{ $category->slug }}</span></td>
+                                        <td>{{ $category->parent_id }}</td>
+                                        <td>{{ $category->depth }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {!! $products->links() !!}
+                        {!! $categories->links() !!}
 
                     </div>
                     <!-- /.card-body -->

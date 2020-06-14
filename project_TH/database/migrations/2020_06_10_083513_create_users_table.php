@@ -15,13 +15,14 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->mediumText('email');
-            $table->mediumText('name')->comment('Họ tên đầy đủ');
+            $table->string('email');
+            $table->string('password');
+            $table->string('name')->comment('Họ tên đầy đủ');
             $table->integer('phone')->comment('Số điện thoại');
-            $table->mediumText('address')->comment('Địa chỉ');
-            $table->tinyInteger('role')->comment('Phân quyền');
-            $table->mediumText('remember_token')->comment('Token để nhớ đăng nhập');     
-            $table->timestamp('email_verified_at')->nullable()->default(null);
+            $table->string('address')->comment('Địa chỉ');
+            $table->tinyInteger('role')->comment('Phân quyền')->default(null);
+            $table->string('remember_token')->comment('Token để nhớ đăng nhập')->default(null);     
+            $table->timestamp('email_verified_at')->nullable()->default(null)->comment('time email xác nhận tài khoản');
             $table->timestamp('deleted_at')->nullable()->default(null)->comment('Thời gian đánh dấu xóa(Xóa mềm)');
             $table->timestamps();
         });

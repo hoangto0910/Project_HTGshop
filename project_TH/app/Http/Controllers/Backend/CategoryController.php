@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-use App\Models\Product;
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +14,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        $products = Product::paginate(5);
-        return view("backend.products.index",[
-            'products' => $products
+        $categories = Category::all();
+        $categories = Category::paginate(5);
+        return view("backend.categories.index", [
+            "categories" => $categories
         ]);
     }
 
@@ -30,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view("backend.products.create");
+        //
     }
 
     /**

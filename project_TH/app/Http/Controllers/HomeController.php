@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
-use App\Models\Product;
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+use App\Models\User;
+use \Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
-class ProductController extends Controller
+class HomeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        $products = Product::paginate(5);
-        return view("backend.products.index",[
-            'products' => $products
-        ]);
+        $users = DB::table('users')->where('role', '1')->first();
+        dd($users);
     }
 
     /**
@@ -30,7 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view("backend.products.create");
+        //
     }
 
     /**
@@ -75,7 +70,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::table('users')->where('id', $id)->update(['name' => "HoangTo"]);
+        echo "ok";
     }
 
     /**
@@ -86,6 +82,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('users')->where('id', $id)->delete();
+        dd("ok");
     }
 }

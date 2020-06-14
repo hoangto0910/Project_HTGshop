@@ -1,0 +1,8 @@
+json, json_encode
+
+VD: Maytinh
+{
+	Ram = 16gb
+	ssd  = 500g 
+}
+- Làm phân trang , hoàn thiện db

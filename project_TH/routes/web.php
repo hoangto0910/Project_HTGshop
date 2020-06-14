@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('backend.blank');
-});
-
 Route::group([
     'namespace' => 'Backend',
     'prefix' => 'admin'
@@ -25,12 +20,16 @@ Route::group([
     Route::get('/dashboard', 'DashboardController@index')->name('backend.dashboard');
     // Quản lý sản phẩm
     Route::group(['prefix' => 'products'], function(){
-       Route::get('/', 'ProductController@index')->name('backend.product.index');
-       Route::get('/create', 'ProductController@create')->name('backend.product.create');
+      Route::get('/', 'ProductController@index')->name('backend.product.index');
+      Route::get('/create', 'ProductController@create')->name('backend.product.create');
     });
-    // ql user
+    // Quản lý user
     Route::group(['prefix' => 'users'], function(){
-       Route::get('/', 'UserController@index')->name('backend.user.index');
-       Route::get('/create', 'UserController@create')->name('backend.user.create');
+      Route::get('/', 'UserController@index')->name('backend.user.index');
+      Route::get('/create', 'UserController@create')->name('backend.user.create');
+    });
+    // Quản lý Category
+    Route::group(['prefix' => 'categories'], function(){
+      Route::get('/' , "CategoryController@index")->name("backend.category.index");
     });
 });

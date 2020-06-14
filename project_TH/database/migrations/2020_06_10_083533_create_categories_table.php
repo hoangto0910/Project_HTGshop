@@ -15,8 +15,8 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->mediumText('name')->comment('Tên danh mục');
-            $table->mediumText('slug');
+            $table->string('name')->comment('Tên danh mục');
+            $table->string('slug');
             $table->tinyInteger('parent_id')->comment('id cha của danh mục hiện tại, nếu là cấp 1 thì parent null');
             $table->tinyInteger('depth')->comment('Độ sâu của danh mục');
             $table->timestamps();
