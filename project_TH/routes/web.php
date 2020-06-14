@@ -13,23 +13,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group([
-    'namespace' => 'Backend',
-    'prefix' => 'admin'
+  'namespace' => 'Backend',
+  'prefix' => 'admin'
 ], function (){
     // Trang dashboard - trang chủ admin
-    Route::get('/dashboard', 'DashboardController@index')->name('backend.dashboard');
+  Route::get('/dashboard', 'DashboardController@index')->name('backend.dashboard');
     // Quản lý sản phẩm
-    Route::group(['prefix' => 'products'], function(){
-      Route::get('/', 'ProductController@index')->name('backend.product.index');
-      Route::get('/create', 'ProductController@create')->name('backend.product.create');
-    });
+  Route::group(['prefix' => 'products'], function(){
+    Route::get('/', 'ProductController@index')->name('backend.product.index');
+    Route::get('/create', 'ProductController@create')->name('backend.product.create');
+  });
     // Quản lý user
-    Route::group(['prefix' => 'users'], function(){
-      Route::get('/', 'UserController@index')->name('backend.user.index');
-      Route::get('/create', 'UserController@create')->name('backend.user.create');
-    });
+  Route::group(['prefix' => 'users'], function(){
+    Route::get('/', 'UserController@index')->name('backend.user.index');
+    Route::get('/create', 'UserController@create')->name('backend.user.create');
+  });
     // Quản lý Category
-    Route::group(['prefix' => 'categories'], function(){
-      Route::get('/' , "CategoryController@index")->name("backend.category.index");
-    });
+  Route::group(['prefix' => 'categories'], function(){
+    Route::get('/' , "CategoryController@index")->name("backend.category.index");
+  });
+});
+
+Route::group([
+  'namespace' => 'Frontend',
+  'prefix' => 'htgshop',
+], function(){
+  // Trang index frontend
+  Route::get("/" , "HomeController@index")->name("frontend.home.index");
 });
