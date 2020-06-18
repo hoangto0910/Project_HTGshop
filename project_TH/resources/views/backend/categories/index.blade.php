@@ -54,7 +54,7 @@
                                 <th>slug</th>
                                 <th>Parent ID</th>
                                 <th>Depth</th>
-
+                                <th>Chức năng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -65,6 +65,7 @@
                                         <td><span class="tag tag-success">{{ $category->slug }}</span></td>
                                         <td>{{ $category->parent_id }}</td>
                                         <td>{{ $category->depth }}</td>
+                                        <td><a href="{{ route('backend.category.showProducts', $category->id) }}" class="btn btn-secondary">Xem sản phẩm</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

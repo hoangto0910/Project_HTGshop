@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 use App\Models\Category;
+use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,10 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::find($id); // quan he 1 n
+        foreach ($category->products as $product) { // khoa chinh la id.c phu la category_id cua products
+            echo $product->content . "<br>";
+        }
     }
 
     /**
@@ -85,5 +89,13 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showProducts($category_id){
+        $category = Category::find($category_id);
+        $products = $category->products;
+        return view("backend.categories.showProducts",[
+            'products' => $products
+        ]);
     }
 }

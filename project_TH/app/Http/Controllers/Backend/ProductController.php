@@ -52,7 +52,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        dd($product->category); // quan he 1 1
     }
 
     /**
@@ -87,5 +88,15 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showImages($id){
+        $product = Product::find($id);
+        // dd($product);
+        // dd($product->images); // Lay ra tat ca anh cua san pham co id = $id
+        $images = $product->images;
+        return view("backend.products.showImages",[
+            'images' => $images
+        ]);
     }
 }

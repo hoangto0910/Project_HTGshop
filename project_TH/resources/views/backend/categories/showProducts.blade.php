@@ -1,25 +1,25 @@
 @extends('backend.layouts.master')
 @section('title-1')
-User
+Show Product
 @endsection
 @section('title-header')
-User
+Show Product
 @endsection
 @section('title-header')
-User
+Show Product
 @endsection
 @section('card-content')
 <!-- Content Header -->
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Danh sách người dùng</h1>
+            <h1 class="m-0 text-dark">Sản phẩm theo danh mục</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Người dùng</a></li>
-                <li class="breadcrumb-item active">Danh sách</li>
+                <li class="breadcrumb-item"><a href="#">Sản phẩm Theo danh mục</a></li>
+                <li class="breadcrumb-item active">Xem sản phẩm theo danh mục</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -32,7 +32,7 @@ User
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Danh sách người dùng</h3>
+                    <h3 class="card-title">Tất cả sản phẩm theo danh mục</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -49,27 +49,22 @@ User
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>Thời gian</th>
-                                <th>Updated_at</th>
-                                <th>Chức năng</th>
+                                <th>Tên sản phẩm</th>
+                                <th>content</th>
+                                <th>category_id</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $user)
-                                <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->created_at }}</td>
-                                    <td>{{ $user->updated_at }}</td>
-                                    <td><a class="btn btn-secondary" href="{{ route('backend.user.showProducts', $user->id) }}">Xem sản phẩm</a></td>
-                                </tr>
+                            @foreach ($products as $product)
+                            <tr>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->content }}</td>
+                                <td>{{ $product->category_id }}</td>
+                            </tr>
                             @endforeach
                         </tbody>
-
                     </table>
-                    {!! $users->links() !!}
+
                 </div>
                 <!-- /.card-body -->
             </div>

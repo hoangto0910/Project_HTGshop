@@ -17,10 +17,8 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('email');
             $table->string('password');
-            $table->string('name')->comment('Họ tên đầy đủ');
-            $table->integer('phone')->comment('Số điện thoại');
-            $table->string('address')->comment('Địa chỉ');
             $table->tinyInteger('role')->comment('Phân quyền')->default(null);
+            $table->integer('user_id')->comment('Quan ly chi tiet user');
             $table->string('remember_token')->comment('Token để nhớ đăng nhập')->default(null);     
             $table->timestamp('email_verified_at')->nullable()->default(null)->comment('time email xác nhận tài khoản');
             $table->timestamp('deleted_at')->nullable()->default(null)->comment('Thời gian đánh dấu xóa(Xóa mềm)');

@@ -54,6 +54,7 @@
                                 <th>Thời gian</th>
                                 <th>Status</th>
                                 <th>Mô tả</th>
+                                <th>Chức năng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -64,6 +65,10 @@
                                         <td>{{ $product->created_at }}</td>
                                         <td><span class="tag tag-success">{{ $product->status }}</span></td>
                                         <td>{{ $product->content }}</td>
+                                        <td>
+                                            <a href="{{ route('backend.product.showImages', $product->id)  }}" class="btn btn-secondary">Xem ảnh</a>
+                                            <a href="">Add to cart</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

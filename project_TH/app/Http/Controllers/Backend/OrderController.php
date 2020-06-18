@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-use App\Models\User_info;
-use App\Models\User;
+use App\Models\Order;
+use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
-class UserController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,16 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        // return view('backend.users.index');
-        // $user = User::find(1); 
-        // $userInfo = $user->user_info; // * 
-        // dd($userInfo);
-
-        $users = User::all();
-        $users = User::paginate(5);
-        return view('backend.users.index',[
-            'users' => $users
-        ]);
+        //
     }
 
     /**
@@ -36,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('backend.users.create');
+        //
     }
 
     /**
@@ -95,10 +84,10 @@ class UserController extends Controller
         //
     }
 
-    public function showProducts($user_id){
-        $user = User::find($user_id);
-        $products = $user->products; // lay ra tat ca sp theo user($id);
-        return view('backend.users.showProducts', [
+    public function showProducts($id){
+        $order = Order::find($id);
+        $products = $order->products;
+        return view('backend.orders.showProducts',[
             'products' => $products
         ]);
     }

@@ -8,11 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../asset/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="{{ asset('asset/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../../asset/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="{{ asset('asset/dist/css/adminlte.min.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
@@ -59,7 +59,7 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src="../../asset/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                <img src="{{ asset('asset/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     Brad Diesel
@@ -75,7 +75,7 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src="../../asset/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                <img src="{{ asset('asset/dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     John Pierce
@@ -91,7 +91,7 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src="../../asset/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                <img src="{{ asset('asset/dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     Nora Silvester
@@ -147,7 +147,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="../../asset/index3.html" class="brand-link">
-        <img src="../../asset/dist/img/AdminLTELogo.png"
+        <img src="{{ asset('asset/dist/img/AdminLTELogo.png') }}"
         alt="AdminLTE Logo"
         class="brand-image img-circle elevation-3"
         style="opacity: .8">
@@ -159,7 +159,7 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="../../asset/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            <img src="{{ asset('asset/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a href="#" class="d-block">Đặng Tô Hoàng</a>
@@ -189,32 +189,32 @@
               </p>
             </a>
           </li>
-            <li class="nav-item has-treeview">
-              <a href="/mvc_new/index.php?mod=post&act=index" class="nav-link">
-                <!-- <i class="nav-icon fas fa-copy"></i> -->
-                <i class="nav-icon fas fa fa-book" aria-hidden="true"></i>
-                <p>
-                  Quản Lý Sản Phẩm
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
+          <li class="nav-item has-treeview">
+            <a href="/mvc_new/index.php?mod=post&act=index" class="nav-link">
+              <!-- <i class="nav-icon fas fa-copy"></i> -->
+              <i class="nav-icon fas fa fa-book" aria-hidden="true"></i>
+              <p>
+                Quản Lý Sản Phẩm
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
 
-                <li class="nav-item">
-                  <a href="{{ route('backend.product.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Quản Lý chức năng</p>
-                  </a>
-                </li>
+              <li class="nav-item">
+                <a href="{{ route('backend.product.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Quản Lý chức năng</p>
+                </a>
+              </li>
 
-                <li class="nav-item">
-                  <a href="{{ route('backend.product.create') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Thêm Mới Sản phẩm</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+              <li class="nav-item">
+                <a href="{{ route('backend.product.create') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Thêm Mới Sản phẩm</p>
+                </a>
+              </li>
+            </ul>
+          </li>
 
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
@@ -232,15 +232,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                  <a href="{{ route('backend.category.index') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Thêm Mới Danh mục</p>
-                  </a>
-                </li>
+                <a href="{{ route('backend.category.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Thêm Mới Danh mục</p>
+                </a>
+              </li>
             </ul>
           </li>
 
-           <li class="nav-item">
+          <li class="nav-item">
             <a href="" class="nav-link">
               <!-- <i class="nav-icon fas fa-tree"></i> -->
               <i class="nav-icon fa fa-address-book" aria-hidden="true"></i>
@@ -265,10 +265,28 @@
             </ul>
           </li>
 
-        <!-- <li class="nav-header">EXAMPLES</li> -->
-      </ul>
-    </nav>
-    <!-- /.sidebar-menu -->
-  </div>
-  <!-- /.sidebar -->
-</aside>
+          <li class="nav-item has-treeview">
+            <a href="" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Quản lý Order
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('backend.category.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Quản lý chức năng</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- <li class="nav-header">EXAMPLES</li> -->
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
