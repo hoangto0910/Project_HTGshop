@@ -1,12 +1,13 @@
 <?php
-
-namespace App\Models;
-
+namespace App;
 use Illuminate\Database\Eloquent\Model;
-
-class User extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class User extends Authenticatable
 {
     protected $table = 'users';
+    protected $fillable = [
+        'name','email','password'
+    ];
 
     // public function user_info(){
     // 	return $this->hasOne(User_info::class);
@@ -18,4 +19,11 @@ class User extends Model
     public function products(){
     	return $this->hasMany(Product::class); // Lk : id.user Fk : user_id .
     }
+
+    public const ROLE = [
+        'admin' => 1,
+        'content' => 2,
+        'sale_person' => 3,
+        'user' => 4
+    ];
 }

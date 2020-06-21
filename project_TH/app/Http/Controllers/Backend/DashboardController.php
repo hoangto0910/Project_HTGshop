@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\User; // logic phai use Trong view nen dung namespace
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('backend.products.dashboard');
+        if (Auth::user()->role == null || Auth::user()->role == User::ROLE['user']) {
+            return redirect()->route('home');
+        }
+        elseif(Auth::user()->role == User::ROLE['admin'] || Auth::user()->role == User::ROLE['content'] || Auth::user()->role == User::ROLE['sale_person']){
+            return view('backend.products.dashboard');
+        }
     }
 
     /**

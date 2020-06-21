@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Quản lý chức năng backend
 Route::group([
   'namespace' => 'Backend',
-  'prefix' => 'admin'
+  'prefix' => 'admin',
+  'middleware' => 'auth'
 ], function (){
     // Trang dashboard - trang chủ admin
   Route::get('/dashboard', 'DashboardController@index')->name('backend.dashboard');
@@ -22,6 +24,7 @@ Route::group([
   Route::group(['prefix' => 'products'], function(){
     Route::get('/', 'ProductController@index')->name('backend.product.index');
     Route::get('/create', 'ProductController@create')->name('backend.product.create');
+    Route::post('/store', 'ProductController@store')->name('backend.product.store');
     Route::get('/showImages/{id}', 'ProductController@showImages')->name('backend.product.showImages');
   });
     // Quản lý user
@@ -41,6 +44,19 @@ Route::group([
   });
 });
 
+Auth::routes();
+//Quản lý Authentication
+Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function(){
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@Login')->name('login');
+    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'RegisterController@register')->name('register');
+    Route::post('logout', 'LoginController@logout')->name('logout');
+});
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+//
+
+// Quản lý chức năng frontend
 Route::group([
   'namespace' => 'Frontend',
   'prefix' => 'htgshop',
@@ -54,3 +70,5 @@ Route::group([
 Route::get('testuser', "Backend\UserInfoController@index");
 Route::get('showproduct/{id}', "Backend\CategoryController@show");
 Route::get('testshow/{id}', "Backend\ProductController@show");
+
+

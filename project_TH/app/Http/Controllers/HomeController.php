@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use \Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+// use App\Http\Controllers\Auth;
 
 class HomeController extends Controller
 {
@@ -14,8 +16,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')->where('role', '1')->first();
-        dd($users);
+        // $users = DB::table('users')->where('role', '1')->first();
+        // dd($users);
+        if (Auth::check()) {
+            $user = Auth::user(); // Lay ra 1 doi tuong model user vua login
+            return view('backend.homes.index');
+        }else{
+            return redirect()->route("login");
+        }
     }
 
     /**

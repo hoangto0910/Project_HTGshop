@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title-1')
-	Dashboard
+	Admin Page
 @endsection
 @section('title-header')
 	Dashboard

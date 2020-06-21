@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Brandname;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,7 +32,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view("backend.products.create");
+        $categories = Category::all();
+        $brandnames = Brandname::all();
+        return view("backend.products.create",[
+            'categories' => $categories,
+            'brandnames' => $brandnames
+        ]);
     }
 
     /**
@@ -41,7 +48,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product();
+        $product->name = $request->get('name', null);
+        $product->origin_price = $request->get('origin_price', null);
+        $product->sale_price = $request->get('sale_price', null);
+        $product->content = $request->get('content', null);
+        $product->category_id = $request->get('category_id', null);
+        $product->status = $request->get('status', null);
+        $product->guarantee = $request->get('guarantee', null);
+        $product->policy = $request->get('policy', null);
+        $product->brandname_id = $request->get('brandname_id', null);
+        $product->save();
+        return redirect()->route('backend.product.index');
     }
 
     /**

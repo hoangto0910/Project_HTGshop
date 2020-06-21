@@ -135,9 +135,13 @@
           </div>
         </li>
         <li class="nav-item">
-          <a href="/mvc_new/index.php?mod=auth&act=logout" class="btn btn-secondary">
-            Log out
-          </a>
+          <form action="{{ route('logout') }}" method="post">
+            @csrf
+            @method('POST')
+            <button type="submit" class="btn btn-primary">
+              Log out
+            </button>
+          </form>
         </li>
       </ul>
     </nav>
@@ -162,7 +166,9 @@
             <img src="{{ asset('asset/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Đặng Tô Hoàng</a>
+            <a href="#" class="d-block">
+              {{ Auth::user()->name }}
+            </a>
           </div>
         </div>
 
@@ -180,6 +186,8 @@
               </p>
             </a>
           </li> -->
+          @if (Auth::user()->role == App\User::ROLE['admin'] || Auth::user()->role == App\User::ROLE['content'])
+          {{-- expr --}}
           <li class="nav-item">
             <a href="{{ route('backend.dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -282,7 +290,25 @@
               </li>
             </ul>
           </li>
-
+          @endif
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <!-- <i class="nav-icon fas fa-tree"></i> -->
+              <i class="nav-icon fa fa-address-book" aria-hidden="true"></i>
+              <p>
+                Home Page
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('home') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Home</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <!-- <li class="nav-header">EXAMPLES</li> -->
         </ul>
       </nav>

@@ -59,7 +59,7 @@ Show Product
                             <tr>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->content }}</td>
-                                <td>{{ $product->user_id }}</td>
+                                <td>{{ $product->user_id }}</td> 
                             </tr>
                             @endforeach
                         </tbody>
