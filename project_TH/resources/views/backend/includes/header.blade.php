@@ -6,7 +6,7 @@
   <title>AdminLTE 3 | Blank Page</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  @yield('head-css')
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('asset/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
@@ -138,7 +138,7 @@
           <form action="{{ route('logout') }}" method="post">
             @csrf
             @method('POST')
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-secondary">
               Log out
             </button>
           </form>
@@ -198,7 +198,7 @@
             </a>
           </li>
           <li class="nav-item has-treeview">
-            <a href="/mvc_new/index.php?mod=post&act=index" class="nav-link">
+            <a href="" class="nav-link">
               <!-- <i class="nav-icon fas fa-copy"></i> -->
               <i class="nav-icon fas fa fa-book" aria-hidden="true"></i>
               <p>
@@ -221,6 +221,8 @@
                   <p>Thêm Mới Sản phẩm</p>
                 </a>
               </li>
+
+              
             </ul>
           </li>
 
@@ -240,7 +242,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('backend.category.index') }}" class="nav-link">
+                <a href="{{ route('backend.category.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Thêm Mới Danh mục</p>
                 </a>

@@ -1,41 +1,41 @@
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-		<title>Electro - HTML Ecommerce Template</title>
+	<title>Electro - HTML Ecommerce Template</title>
 
-		<!-- Google font -->
-		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-		<!-- Bootstrap -->
-		<link type="text/css" rel="stylesheet" href="../../frontend/css/bootstrap.min.css"/>
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}"/>
 
-		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="../../frontend/css/slick.css"/>
-		<link type="text/css" rel="stylesheet" href="../../frontend/css/slick-theme.css"/>
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick.css') }}"/>
+	<link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick-theme.css') }}"/>
 
-		<!-- nouislider -->
-		<link type="text/css" rel="stylesheet" href="../../frontend/css/nouislider.min.css"/>
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/nouislider.min.css') }}"/>
 
-		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="../../frontend/css/font-awesome.min.css">
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.min.css') }}">
 
-		<!-- Custom stlylesheet -->
-		<link type="text/css" rel="stylesheet" href="../../frontend/css/style.css"/>
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/style.css') }}"/>
 
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-    </head>
+	</head>
 	<body>
 		<!-- HEADER -->
 		<header>
@@ -173,7 +173,7 @@
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="#">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
+						<li><a href="{{ route('frontend.home.showCategories') }}">Categories</a></li>
 						<li><a href="#">Laptops</a></li>
 						<li><a href="#">Smartphones</a></li>
 						<li><a href="#">Cameras</a></li>

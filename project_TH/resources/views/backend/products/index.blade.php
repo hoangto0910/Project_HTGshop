@@ -64,7 +64,7 @@ Products
                                 <td><span class="tag tag-success">{{ $product->status }}</span></td>
                                 <td>{{ $product->created_at }}</td>           
                                 <td>                                
-                                    <a href="" class="btn btn-primary">Sửa</a>
+                                    <a href="{{ route('backend.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
                                     <a href="" class="btn btn-secondary">Chi tiết</a>
                                     <a href="{{ route('backend.product.showImages', $product->id)  }}" class="btn btn-primary">Xem ảnh</a>
                                     <a href="" class="btn btn-danger">Xóa</a>

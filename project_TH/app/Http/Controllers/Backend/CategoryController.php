@@ -5,6 +5,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategoryRequest;
+
 
 class CategoryController extends Controller
 {
@@ -29,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.categories.create');
     }
 
     /**
@@ -38,9 +40,15 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        $category = new Category();
+        $category->name = $request->name;
+        // $category->slug
+        $category->parent_id = $request->parent_id;
+        $category->depth = $request->depth;
+        $category->save(); // luu tat ca thuoc tinh vao key cot trong bang
+        return redirect()->route('backend.category.index');
     }
 
     /**
@@ -65,7 +73,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('backend.categories.edit',[
+            'category' => $category
+        ]);
     }
 
     /**
@@ -75,9 +86,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCategoryRequest $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->parent_id = $request->parent_id;
+        $category->depth = $request->depth;
+        $category->save();
+        return redirect()->route('backend.category.index');
     }
 
     /**
@@ -88,7 +104,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 
     public function showProducts($category_id){

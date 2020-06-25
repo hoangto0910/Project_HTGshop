@@ -26,6 +26,8 @@ Route::group([
     Route::get('/create', 'ProductController@create')->name('backend.product.create');
     Route::post('/store', 'ProductController@store')->name('backend.product.store');
     Route::get('/showImages/{id}', 'ProductController@showImages')->name('backend.product.showImages');
+    Route::get('edit{id}', 'ProductController@edit')->name('backend.product.edit');
+    Route::put('update/{id}', 'ProductController@update')->name('backend.product.update');
   });
     // Quản lý user
   Route::group(['prefix' => 'users'], function(){
@@ -37,6 +39,11 @@ Route::group([
   Route::group(['prefix' => 'categories'], function(){
     Route::get('/' , "CategoryController@index")->name("backend.category.index");
     Route::get('/showProducts/{category_id}', "CategoryController@showProducts")->name('backend.category.showProducts');
+    Route::get('create', 'CategoryController@create')->name('backend.category.create');
+    Route::post('store', 'CategoryController@store')->name('backend.category.store');
+    Route::get('edit/{id}', 'CategoryController@edit')->name('backend.category.edit');
+    Route::put('update/{id}', 'CategoryController@update')->name('backend.category.update');
+    Route::get('delete/{id}', 'CategoryController@destroy')->name('backend.category.destroy');
   });
     // Quản lý Order
   Route::group(['prefix' => 'orders'], function(){
@@ -63,6 +70,7 @@ Route::group([
 ], function(){
   // Trang index frontend
   Route::get("/" , "HomeController@index")->name("frontend.home.index");
+  Route::get("categories", "HomeController@showCategories")->name("frontend.home.showCategories");
 });
 
 

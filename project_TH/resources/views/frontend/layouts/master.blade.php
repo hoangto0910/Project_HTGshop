@@ -1,5 +1,5 @@
-@include("frontend.includes.header");
+@include("frontend.includes.header")
 <!-- SECTION -->
-@yield('content');
+@yield('content')
 <!-- /NEWSLETTER -->
-@include("frontend.includes.footer");
+@include("frontend.includes.footer")

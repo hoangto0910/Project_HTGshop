@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\frontend;
-
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -81,5 +81,12 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showCategories(){
+        $categories = Category::all();
+        return view('frontend.home.showCategory',[
+            'categories' => $categories
+        ]);
     }
 }

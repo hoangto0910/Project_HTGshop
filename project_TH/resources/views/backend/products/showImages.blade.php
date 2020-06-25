@@ -57,11 +57,18 @@ Show images
                         <tbody>
                             @foreach ($images as $image)
                             <tr>
+                                @if (count($images) == 0)
+                                <td>Sản phẩm này chưa có ảnh</td>
+                                @else
                                 <td>{{ $image->name }}</td>
                                 <td>{{ $image->product_id }}</td>
-                                <td><img width="50%" height="50%" src="{{ $image->path }}" alt=""></td>
+                                <td><img width="50%" height="50%" src="{{ asset('$image->path') }}" alt=""></td>
+                                @endif
                             </tr>
                             @endforeach
+                            <tr>
+                                <td><a href="" class="btn btn-secondary">Thêm ảnh</a></td>
+                            </tr>
                         </tbody>
                     </table>
 
