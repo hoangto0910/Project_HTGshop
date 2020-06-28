@@ -8,6 +8,10 @@ class Product extends Model
 {
     protected $table = 'products';
 
+    protected $casts = [
+        'config' => 'array'
+    ];
+
     public function category(){
     	return $this->belongsTo(Category::class);
     }

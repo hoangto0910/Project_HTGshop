@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -21,7 +22,14 @@ class UserController extends Controller
         // $user = User::find(1); 
         // $userInfo = $user->user_info; // * 
         // dd($userInfo);
-
+        // Storage::put('public/text1.txt', 'Tohoang');
+        // $contents = Storage::get('text1.txt');
+        // $check = Storage::disk('local')->exists('text1.txt');
+        // Storage::disk('local2')->put('text2.txt', "hoang");
+        // dd($check);
+        dd(Storage::allFiles('/'));
+        return Storage::disk('local')->download('text1.txt');
+        // return Storage::disk('public')->download('text1.txt');
         $users = User::all();
         $users = User::paginate(5);
         return view('backend.users.index',[

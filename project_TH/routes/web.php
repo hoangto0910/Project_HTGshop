@@ -25,9 +25,13 @@ Route::group([
     Route::get('/', 'ProductController@index')->name('backend.product.index');
     Route::get('/create', 'ProductController@create')->name('backend.product.create');
     Route::post('/store', 'ProductController@store')->name('backend.product.store');
+    Route::get('show/{id}', 'ProductController@show')->name('backend.product.show');
     Route::get('/showImages/{id}', 'ProductController@showImages')->name('backend.product.showImages');
     Route::get('edit{id}', 'ProductController@edit')->name('backend.product.edit');
     Route::put('update/{id}', 'ProductController@update')->name('backend.product.update');
+    //anh san pham
+    Route::get('addImages/{id}', 'ProductController@addImages')->name('backend.product.addimages');
+    Route::post('storeImages/{id}', 'ProductController@storeImages')->name('backend.product.storeimages');
   });
     // Quản lý user
   Route::group(['prefix' => 'users'], function(){

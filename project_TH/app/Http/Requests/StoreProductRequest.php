@@ -24,13 +24,14 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:8', 'max:100'],
+            'name' => ['required', 'min:6', 'max:100'],
             'origin_price' => ['required', 'numeric'],
             'sale_price' => ['required', 'numeric'],
             'content' => ['required'],
             'status' => ['required'],
             'guarantee' => ['required'],
-            'policy' => ['required']
+            'policy' => ['required'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:10000'],
         ];
     }
 
@@ -43,7 +44,8 @@ class StoreProductRequest extends FormRequest
             'content' => 'mô tả sản phẩm',
             'status' => 'Trạng thái sản phẩm',
             'guarantee' => 'Thời gian bảo hành',
-            'policy' => 'Chính sách'
+            'policy' => 'Chính sách',
+            'image' => 'Ảnh',
         ];
     }
 
@@ -54,6 +56,8 @@ class StoreProductRequest extends FormRequest
             'min' => ':attribute Phải lớn hơn :min',
             'max' => ':attribute Phải ít hơn :max',
             'numeric' => ':attribute Phải là dạng số',
+            'image' => 'Phải upload File có dạng là ảnh',
+            'mimes' => ':attribute Phải có đuôi là : jpeg, png, jpg',
         ];
     }
 }

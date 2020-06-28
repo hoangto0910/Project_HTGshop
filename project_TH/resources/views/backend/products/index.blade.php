@@ -1,3 +1,4 @@
+{{-- {{ dd($productConfigs) }} --}}
 @extends('backend.layouts.master')
 @section('title-1')
 Products
@@ -51,8 +52,10 @@ Products
                             <tr>
                                 <th>ID</th>
                                 <th>Tên sản phẩm</th>
+                                {{-- <th>Thông số</th> --}}
                                 <th>Status</th>
                                 <th>Thời gian</th>
+                                <th>Ảnh đại diện</th>
                                 <th>Chức năng</th>
                             </tr>
                         </thead>
@@ -61,8 +64,14 @@ Products
                             <tr>
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
+                                {{-- <td>
+                                    @foreach ($productConfigs as $config)
+                                        <b>{{ $config->key }}</b> : {{ $config->value }} <br> 
+                                    @endforeach
+                                </td> --}}
                                 <td><span class="tag tag-success">{{ $product->status }}</span></td>
-                                <td>{{ $product->created_at }}</td>           
+                                <td>{{ $product->created_at }}</td>
+                                <td><img width="100px" height="100px" src='{{ asset("$product->image") }}' alt=""></td>         
                                 <td>                                
                                     <a href="{{ route('backend.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
                                     <a href="" class="btn btn-secondary">Chi tiết</a>
