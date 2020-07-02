@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\frontend;
 use App\Models\Category;
+use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view("frontend.home.homeIndex");
+        $topsell_product = Product::orderby('count_bought', 'desc')->take(5)->get();
+        // $new_products = Product::orderby('count_bought', 'desc')->take(4)->get();
+        $new_products = Product::orderby('created_at', 'desc')->take(5)->get();
+        // dd($new_products);
+        return view("frontend.home.homeIndex", [
+            'topsell_product' => $topsell_product,
+            'new_products' => $new_products
+        ]);
     }
 
     /**
@@ -89,4 +97,15 @@ class HomeController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function showProduct($id){
+        $product = Product::find($id);
+        $product_images = $product->images;
+        // dd($product_images);
+        return view('frontend.home.showProduct', [
+            'product' => $product,
+            'product_images' => $product_images
+        ]);
+    }
+
 }

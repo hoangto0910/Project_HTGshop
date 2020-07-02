@@ -12,8 +12,12 @@ class Product extends Model
         'config' => 'array'
     ];
 
+  //   protected $fillable = [ 
+  //     'config'
+  // ];
+
     public function category(){
-    	return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function images(){

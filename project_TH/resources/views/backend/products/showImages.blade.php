@@ -62,9 +62,11 @@ Show images
                                 <td><img width="50%" height="50%" src='{{ asset("$image->path") }}' alt=""></td>
                             </tr>
                             @endforeach
+                            @can('admins')
                             <tr>
                                 <td><a href="{{ route('backend.product.addimages', $product_id) }}" class="btn btn-secondary">Thêm ảnh</a></td>
                             </tr>
+                            @endcan
                         </tbody>
                     </table>
 

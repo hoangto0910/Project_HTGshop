@@ -1,20 +1,22 @@
-{{-- {{ dd($productConfigs) }} --}}
-@extends('backend.layouts.master')
-@section('title-1')
-Products
-@endsection
-@section('title-header')
-Products
-@endsection
-@section('title-header')
-Products
-@endsection
-@section('card-content')
-<!-- Content Header -->
-<div class="container-fluid">
+ {{-- {{ dd($productConfigs) }} --}}
+ @extends('backend.layouts.master')
+ @section('title-1')
+ Products
+ @endsection
+ @section('title-header')
+ Products
+ @endsection
+ @section('title-header')
+ Products
+ @endsection
+ @section('card-content')
+ <!-- Content Header -->
+ <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
+            @can('admins')
             <h2 class="m-0 text-dark"><a href="{{ route('backend.product.create') }}" class="btn btn-success">Thêm mới sản phẩm</a></h2>
+            @endcan
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -51,11 +53,11 @@ Products
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên sản phẩm</th>
+                                <th width="20%">Tên sản phẩm</th>
                                 {{-- <th>Thông số</th> --}}
-                                <th>Status</th>
-                                <th>Thời gian</th>
                                 <th>Ảnh đại diện</th>
+                                <th>Thời gian</th>
+                                <th>Status</th>
                                 <th>Chức năng</th>
                             </tr>
                         </thead>
@@ -65,18 +67,35 @@ Products
                                 <td>{{ $product->id }}</td>
                                 <td>{{ $product->name }}</td>
                                 {{-- <td>
-                                    @foreach ($productConfigs as $config)
-                                        <b>{{ $config->key }}</b> : {{ $config->value }} <br> 
+                                    @foreach (json_decode($product->config) as $config)
+                                    <b>{{ $config->key }}</b> : {{ $config->value }} <br> 
                                     @endforeach
                                 </td> --}}
-                                <td><span class="tag tag-success">{{ $product->status }}</span></td>
-                                <td>{{ $product->created_at }}</td>
-                                <td><img width="100px" height="100px" src='{{ asset("$product->image") }}' alt=""></td>         
-                                <td>                                
+                                <td><img width="100px" height="100px" src='{{ asset("$product->image") }}' alt=""></td>  
+                                <td>{{ $product->updated_at }}</td>
+                                <td>
+                                    @if ($product->status == 0)
+                                    Đang Nhập
+                                    @elseif($product->status == 1)
+                                    Mở bán
+                                    @elseif($product->status == 2)
+                                    Hết Hàng
+                                    @endif
+                                </td>
+                                <td>
+                                    @can('update', $product)                                
                                     <a href="{{ route('backend.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-secondary">Chi tiết</a>
+                                    @endcan
+                                    
+                                    <a href="{{ route('frontend.home.showProduct', $product->id) }}" class="btn btn-secondary">Chi tiết</a>
                                     <a href="{{ route('backend.product.showImages', $product->id)  }}" class="btn btn-primary">Xem ảnh</a>
-                                    <a href="" class="btn btn-danger">Xóa</a>
+                                    @can('admins')
+                                    <form action="{{ route('backend.product.destroy', $product->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

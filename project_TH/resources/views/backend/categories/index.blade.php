@@ -68,7 +68,11 @@ Categories
                                 <td>
                                     <a href="{{ route('backend.category.showProducts', $category->id) }}" class="btn btn-secondary">Xem sản phẩm</a>
                                     <a href="{{ route('backend.category.edit', $category->id) }}" class="btn btn-primary">Sửa Danh mục</a>
-                                    <a href="{{ route('backend.category.destroy', $category->id) }}" class="btn btn-danger">Xóa danh mục</a>
+                                    <form action="{{ route('backend.category.destroy', $category->id) }} }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
                                 </td>
                                 </tr>
                                 @endforeach

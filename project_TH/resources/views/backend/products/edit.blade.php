@@ -1,3 +1,4 @@
+{{-- {{ dd('co') }} --}}
 @extends('backend.layouts.master')
 @section('title-1')
 Edit Products
@@ -45,7 +46,7 @@ Products
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" method="POST" action="{{ route('backend.product.update', $product->id) }}">
+                <form role="form" method="POST" enctype="multipart/form-data" action="{{ route('backend.product.update', $product->id) }}">
                     {{ csrf_field() }}
                     @method('PUT')
                     <div class="card-body">
@@ -85,6 +86,27 @@ Products
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                             <div class="form-group">
+                                <label>Config(Thông số sản phẩm)</label>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Key:
+                                    </div>
+                                    <div class="col-md-4">
+                                        Value:
+                                    </div>
+                                </div>
+                                @for ($i=0; $i < count(json_decode($product->config)); $i++)
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <input type="text" name="config[{{ $i }}][key]" class="form-control" value="{{ $product->config[$i]['key'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" name="config[{{ $i }}][value]" class="form-control" value="{{ $product->config[$i]['value'] ?? '' }}">
+                                    </div>
+                                </div>
+                                @endfor
+                            </div>
+                            <div class="form-group">
                                 <label>Danh mục sản phẩm</label>
                                 <select class="form-control select2" name="category_id" style="width: 100%;">
                                     @foreach ($categories as $category)
@@ -119,14 +141,14 @@ Products
                                 <label for="exampleInputEmail1">Chính sách sản phẩm</label>
                                 <input type="text" class="form-control" placeholder="Điền Thời hạn bảo hành" name="policy" value="{{ $product->policy }}">
                                 @error('policy')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">Hình ảnh sản phẩm</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                                        <input type="file" name="image" class="custom-file-input" id="exampleInputFile">
                                         <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                     </div>
                                     <div class="input-group-append">
@@ -161,7 +183,7 @@ Products
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
 @endsection
 @section('foot-js')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 <script>
     $(document).ready(function() {
       $('#summernote').summernote();

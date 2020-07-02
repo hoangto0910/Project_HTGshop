@@ -186,7 +186,7 @@
               </p>
             </a>
           </li> -->
-          @if (Auth::user()->role == App\User::ROLE['admin'] || Auth::user()->role == App\User::ROLE['content'])
+          {{-- @if (Auth::user()->role == App\User::ROLE['admin'] || Auth::user()->role == App\User::ROLE['content']) --}}
           {{-- expr --}}
           <li class="nav-item">
             <a href="{{ route('backend.dashboard') }}" class="nav-link">
@@ -214,18 +214,18 @@
                   <p>Quản Lý chức năng</p>
                 </a>
               </li>
-
+              @if (Gate::allows('admins'))
               <li class="nav-item">
                 <a href="{{ route('backend.product.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Thêm Mới Sản phẩm</p>
                 </a>
               </li>
-
+              @endif
               
             </ul>
           </li>
-
+          @if (Gate::allows('admins'))
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -249,7 +249,8 @@
               </li>
             </ul>
           </li>
-
+          @endif
+          @if (Gate::allows('admins'))
           <li class="nav-item">
             <a href="" class="nav-link">
               <!-- <i class="nav-icon fas fa-tree"></i> -->
@@ -274,6 +275,7 @@
               </li>
             </ul>
           </li>
+          @endif
 
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
@@ -292,7 +294,7 @@
               </li>
             </ul>
           </li>
-          @endif
+          {{-- @endif --}}
           <li class="nav-item">
             <a href="" class="nav-link">
               <!-- <i class="nav-icon fas fa-tree"></i> -->

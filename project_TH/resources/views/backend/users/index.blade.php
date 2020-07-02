@@ -58,13 +58,26 @@ User
                         </thead>
                         <tbody>
                             @foreach ($users as $user)
-                                <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->created_at }}</td>
-                                    <td>{{ $user->updated_at }}</td>
-                                    <td><a class="btn btn-secondary" href="{{ route('backend.user.showProducts', $user->id) }}">Xem sản phẩm</a></td>
-                                </tr>
+                            <tr>
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->created_at }}</td>
+                                <td>{{ $user->updated_at }}</td>
+                                <td>
+                                    <a class="btn btn-secondary" href="{{ route('backend.user.showProducts', $user->id) }}">Xem sản phẩm</a>
+                                    @can('admins')
+                                    <a class="btn btn-primary" href="{{ route('backend.user.edit', $user->id) }}">Sửa Thông tin</a>
+                                    @endcan
+                                    
+                                    @can('admins')
+                                    <form action="{{ route('backend.user.destroy', $user->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                    @endcan
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
 

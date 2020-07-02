@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 use App\Models\User_info;
-use App\Models\User;
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,14 +29,18 @@ class UserController extends Controller
         // $check = Storage::disk('local')->exists('text1.txt');
         // Storage::disk('local2')->put('text2.txt', "hoang");
         // dd($check);
-        dd(Storage::allFiles('/'));
-        return Storage::disk('local')->download('text1.txt');
+
+        // return Storage::disk('local')->download('text1.txt');
         // return Storage::disk('public')->download('text1.txt');
-        $users = User::all();
-        $users = User::paginate(5);
-        return view('backend.users.index',[
-            'users' => $users
-        ]);
+        if (Gate::allows('admins')) {
+            $users = User::all();
+            $users = User::paginate(5);
+            return view('backend.users.index',[
+                'users' => $users
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -44,7 +50,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('backend.users.create');
+        if (Gate::allows('admins')) {
+            return view('backend.users.create');
+        }else{
+            return abort('403');
+        }   
     }
 
     /**
@@ -55,7 +65,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (Gate::allows('admins')) {
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->address = $request->get('address');
+            $user->phone = $request->get('phone');
+            $user->email = $request->get('email');
+            $user->password = Hash::make($request->get('password'));
+            $user->role = $request->get('role');
+            $user->save();
+            return redirect()->route('backend.user.index');
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -77,7 +99,14 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        if (Gate::allows('admins')) {
+            $user = User::find($id);
+            return view('backend.users.edit', [
+                'user' => $user
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -89,7 +118,19 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Gate::allows('admins')) {
+            $user = User::find($id);
+            $user->name = $request->get('name');
+            $user->address = $request->get('address');
+            $user->phone = $request->get('phone');
+            $user->email = $request->get('email');
+            $user->password = Hash::make($request->get('password'));
+            $user->role = $request->get('role');
+            $user->save();
+            return redirect()->route('backend.user.index');
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -100,7 +141,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Gate::allows('admins')) {
+            $user = User::find($id);
+            $user->delete();
+            return redirect()->route('backend.user.index');
+        }else{
+            return abort('403');
+        }
     }
 
     public function showProducts($user_id){

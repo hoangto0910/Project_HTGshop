@@ -15,6 +15,7 @@ use Illuminate\Support\MessageBag;
 use App\Http\Requests\StoreProductRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -25,15 +26,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        foreach ($products as $product) {
-            $productConfigs = json_decode($product->config);
-        }
+        $products = Product::orderBy('updated_at', 'desc')->get();
+        // foreach ($products as $product) {
+        //     // $productConfigs = json_decode($product->config);
+        //     echo ($product->config);
+        // }
         // dd($products);
         $products = Product::paginate(5);
         return view("backend.products.index",[
             'products' => $products,
-            'productConfigs' => $productConfigs
+            // 'productConfigs' => $productConfigs
         ]);
     }
 
@@ -44,12 +46,17 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $brandnames = Brandname::all();
-        return view("backend.products.create",[
-            'categories' => $categories,
-            'brandnames' => $brandnames,
-        ]);
+        if (Gate::allows('admins')) {
+            // dd('co');
+            $categories = Category::all();
+            $brandnames = Brandname::all();
+            return view("backend.products.create",[
+                'categories' => $categories,
+                'brandnames' => $brandnames,
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -58,8 +65,54 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
+        // $json = $request->get('config', null);
+        // dd($json);
+        // $json = json_decode($json);
+        // // dd($json);
+        // foreach ($json as $value) {
+        //     echo $value->key . " : " . $value->value . "<br>";
+        // }
+        // die();
+
+        if (Gate::allows('admins')) {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nameFile = $image->getClientOriginalName();
+                $url = Storage::url($nameFile);
+            // dd($url);
+                Storage::disk('public')->putFileAs('products', $image, $nameFile);
+            }else{
+                dd('khong co anh');
+            }
+
+        $product = new Product(); // Tao 1 doi tuong model Product -> $product co het thuoc tinh la cac key (truong cua bang)
+        $product->name = $request->get('name', null);
+        $product->image = $url;
+        $product->origin_price = $request->get('origin_price', null);
+        $product->sale_price = $request->get('sale_price', null);
+        $product->content = $request->get('content', null);
+        // Luu Json
+        // $product->config = json_encode($request->get('config', null));
+        // dd($product->config);
+        // $product->config = $request->get('config', null);
+        if (Auth::check()) {
+            $product->user_id = Auth::user()->id;
+        }else{
+            $product->user_id = null;
+        }
+        $product->category_id = $request->get('category_id', null);
+        $product->status = $request->get('status', null);
+        $product->guarantee = $request->get('guarantee', null);
+        $product->policy = $request->get('policy', null);
+        $product->brandname_id = $request->get('brandname_id', null);
+        // dd($product);
+        $product->save();
+        return redirect()->route('backend.product.index');
+    }else{
+        return abort('403');
+    }
         // $validate = $request->validate([
         //     'name' => ['required', 'min:8', 'max:10'],
         //     'origin_price' => ['required', 'numeric'],
@@ -98,7 +151,7 @@ class ProductController extends Controller
         // if ($validator->errors()) {
         //     return back()->withErrors($validator)->withInput();
         // }
-        
+
         // if ($request->hasFile('images')) {
         //    // $path = Storage::disk('public')->putFile('images3', $request->file('images'));
         //     $images = $request->file('images');
@@ -109,7 +162,7 @@ class ProductController extends Controller
         // }else{
         //     dd('k co file');
         // }
-    
+
         // $images = $request->file('images');
         // foreach ($images as $image) {
         //     $nameFile = $image->getClientOriginalName();
@@ -127,37 +180,8 @@ class ProductController extends Controller
         //     dd('k co file');
         // }
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $nameFile = $image->getClientOriginalName();
-            $url = Storage::url($nameFile);
-            Storage::disk('public')->putFileAs('', $image, $nameFile);
-        }else{
-            dd('khong co anh');
-        }
 
-        $product = new Product(); // Tao 1 doi tuong model Product -> $product co het thuoc tinh la cac key (truong cua bang)
-        $product->name = $request->get('name', null);
-        $product->image = $url;
-        $product->origin_price = $request->get('origin_price', null);
-        $product->sale_price = $request->get('sale_price', null);
-        $product->content = $request->get('content', null);
-        //Luu Json
-        $product->config = json_encode($request->get('config', null));
-        if (Auth::check()) {
-            $product->user_id = Auth::user()->id;
-        }else{
-            $product->user_id = null;
-        }
-        $product->category_id = $request->get('category_id', null);
-        $product->status = $request->get('status', null);
-        $product->guarantee = $request->get('guarantee', null);
-        $product->policy = $request->get('policy', null);
-        $product->brandname_id = $request->get('brandname_id', null);
-        // dd($product);
-        $product->save();
-        return redirect()->route('backend.product.index');
-    }
+}
 
     /**
      * Display the specified resource.
@@ -190,18 +214,33 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id) 
+    // $product phan quyen middleware sau $id
     {
-        $categories = Category::all();
-        $brandnames = Brandname::all();
         $product = Product::find($id);
-        return view('backend.products.edit',[
-            'categories' => $categories,
-            'brandnames' => $brandnames,
-            'product' => $product
-        ]);
-    }
+        // dd(json_decode($product->config));
 
+        // // Policies
+        // $user = Auth::user();
+        // // dd($user);
+        // if ($user->can('update', $product)) {
+        //     dd("co");
+        // }else{
+        //     dd("khong");
+        // }
+
+        if (Gate::allows('update-product', $product)){ //check user dang login
+            $categories = Category::all();
+            $brandnames = Brandname::all();
+            return view('backend.products.edit',[
+                'categories' => $categories,
+                'brandnames' => $brandnames,
+                'product' => $product
+            ]);
+        }else{
+            return abort('403');
+        }
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -209,21 +248,37 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        // dd($request);
         $product = Product::find($id);
-        $product->name = $request->get('name');
-        $product->origin_price = $request->get('origin_price');
-        $product->sale_price = $request->get('sale_price');
-        $product->content = $request->get('content');
-        $product->category_id = $request->get('category_id');
-        $product->brandname_id = $request->get('brandname_id');
-        $product->status = $request->get('status');
-        $product->guarantee = $request->get('guarantee');
-        $product->policy = $request->get('policy');
-        $product->user_id = Auth::user()->id;
-        $product->save();
-        return redirect()->route('backend.product.index');
+        if (Gate::allows('update-product', $product)){
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nameFile = $image->getClientOriginalName();
+                $url = Storage::url($nameFile);
+            // dd($url);
+                Storage::disk('public')->putFileAs('', $image, $nameFile);
+            }else{
+                dd('khong co anh');
+            }
+            $product->name = $request->get('name');
+            $product->image = $url;
+            $product->origin_price = $request->get('origin_price');
+            $product->sale_price = $request->get('sale_price');
+            $product->content = $request->get('content');
+            $product->config = json_encode($request->get('config'));
+            $product->category_id = $request->get('category_id');
+            $product->brandname_id = $request->get('brandname_id');
+            $product->status = $request->get('status');
+            $product->guarantee = $request->get('guarantee');
+            $product->policy = $request->get('policy');
+            $product->user_id = Auth::user()->id;
+            $product->save();
+            return redirect()->route('backend.product.index');
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -234,7 +289,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Gate::allows('admins')) {
+            $product = Product::find($id);
+        // dd($product->id);
+            $product->delete();
+            return redirect()->route('backend.product.index');
+        }else{
+            return abort('403');
+        }
+        
     }
 
     public function showImages($id){
@@ -259,6 +322,11 @@ class ProductController extends Controller
     }
 
     public function storeImages(Request $request, $id){
+
+        $validate = $request->validate([
+            "images" => ['required',]
+        ]);
+
         $product_id = $id;
         if ($request->hasFile('images')) {
             $images = $request->file('images');

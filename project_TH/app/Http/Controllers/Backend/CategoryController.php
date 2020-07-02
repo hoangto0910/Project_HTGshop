@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryRequest;
-
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -17,11 +17,15 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        $categories = Category::paginate(5);
-        return view("backend.categories.index", [
-            "categories" => $categories
-        ]);
+        if (Gate::allows('admins')) {
+            $categories = Category::all();
+            $categories = Category::paginate(5);
+            return view("backend.categories.index", [
+                "categories" => $categories
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -31,9 +35,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('backend.categories.create');
+        if (Gate::allows('admins')) {
+            return view('backend.categories.create');
+        }else{
+            return abort('403');
+        }
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -42,13 +49,16 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $category = new Category();
-        $category->name = $request->name;
+        if (Gate::allows('admins')) {
+            $category = new Category();
+            $category->name = $request->name;
         // $category->slug
-        $category->parent_id = $request->parent_id;
-        $category->depth = $request->depth;
+            $category->parent_id = $request->parent_id;
+            $category->depth = $request->depth;
         $category->save(); // luu tat ca thuoc tinh vao key cot trong bang
-        return redirect()->route('backend.category.index');
+        return redirect()->route('backend.category.index');        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -73,10 +83,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
-        return view('backend.categories.edit',[
-            'category' => $category
-        ]);
+        if (Gate::allows('admins')) {
+            $category = Category::find($id);
+            return view('backend.categories.edit',[
+                'category' => $category
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -88,12 +102,16 @@ class CategoryController extends Controller
      */
     public function update(StoreCategoryRequest $request, $id)
     {
-        $category = Category::find($id);
-        $category->name = $request->name;
-        $category->parent_id = $request->parent_id;
-        $category->depth = $request->depth;
-        $category->save();
-        return redirect()->route('backend.category.index');
+        if (Gate::allows('admins')) {
+            $category = Category::find($id);
+            $category->name = $request->name;
+            $category->parent_id = $request->parent_id;
+            $category->depth = $request->depth;
+            $category->save();
+            return redirect()->route('backend.category.index');
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -104,7 +122,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        
+        if (Gate::allows('admins')) {
+            $category = Category::find($id);
+            $category->delete();
+            return redirect()->route('backend.category.index');
+        }else{
+            return abort('403');
+        }
     }
 
     public function showProducts($category_id){
