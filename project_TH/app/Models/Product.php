@@ -8,6 +8,12 @@ class Product extends Model
 {
     protected $table = 'products';
 
+    public const STATUS = [
+        'dangnhap' => 0,
+        'moban' => 1,
+        'hethang' => 2,
+    ];
+
     protected $casts = [
         'config' => 'array'
     ];

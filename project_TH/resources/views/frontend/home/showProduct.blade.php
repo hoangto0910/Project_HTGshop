@@ -1,4 +1,15 @@
 @extends('frontend.layouts.master')
+@section('css-page')
+<style>
+	.content-img img{
+		max-width: 100% !important;
+		height: auto !important;
+	}
+	.border-radius{
+		border-radius: 5px;
+	}
+</style>
+@endsection
 @section('content')
 {{-- {{ $product->content = htmlspecialchars($product->content) }} --}}
 <!-- BREADCRUMB -->
@@ -13,7 +24,7 @@
 					<li><a href="#">All Categories</a></li>
 					<li><a href="#">Accessories</a></li>
 					<li><a href="#">Headphones</a></li>
-					<li class="active">Product name goes here</li>
+					<li class="active">{{ $product->name }}</li>
 				</ul>
 			</div>
 		</div>
@@ -34,7 +45,7 @@
 				<div id="product-main-img">
 					@foreach ($product_images as $product_image)
 					<div class="product-preview">
-						<img src="{{ asset("$product_image->path") }}" alt="">
+						<img src="{{ asset("$product_image->path") }}" class="border-radius" width="150px" height="320px" alt="">
 					</div>
 					@endforeach
 				</div>
@@ -46,7 +57,7 @@
 				<div id="product-imgs">
 					@foreach ($product_images as $product_image)
 					<div class="product-preview">
-						<img src="{{ asset("$product_image->path") }}" alt="">
+						<img src="{{ asset("$product_image->path") }}" width="150px" height="150px" alt="">
 					</div>
 					@endforeach
 				</div>
@@ -68,13 +79,20 @@
 						<a class="review-link" href="#">10 Review(s) | Add your review</a>
 					</div>
 					<div>
-						<h3 class="product-price">{{ $product->origin_price  }} VND<del class="product-old-price">{{ $product->sale_price }} VND</del></h3>
-						<span class="product-available">In Stock</span>
+						<h3 class="product-price">{{ number_format($product->origin_price) }} VNĐ <del class="product-old-price">{{ number_format($product->sale_price) }} VNĐ </del></h3>
+						<span class="product-available">
+							@if ($product->quantity > 0)
+							Còn Hàng
+							@elseif ($product->quantity == 0)
+							Hết hàng
+							@endif
+							{{-- In Stock --}}
+						</span>
 					</div>
 					<p>{{ $product->description }}</p>
 
 					<div class="product-options">
-						<label>
+						{{-- <label>
 							Size
 							<select class="input-select">
 								<option value="0">X</option>
@@ -85,22 +103,24 @@
 							<select class="input-select">
 								<option value="0">Red</option>
 							</select>
-						</label>
+						</label> --}}
 					</div>
 
 					<div class="add-to-cart">
-						<div class="qty-label">
+						{{-- <div class="qty-label">
 							Qty
 							<div class="input-number">
 								<input type="number">
 								<span class="qty-up">+</span>
 								<span class="qty-down">-</span>
 							</div>
-						</div>
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+						</div> --}}
+						@if ($product->quantity > 0)
+						<a href="{{ route('frontend.cart.add', $product->id) }}"><button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button></a>
+						@endif
 					</div>
 
-					<ul class="product-btns">
+					{{-- <ul class="product-btns">
 						<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
 						<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
 					</ul>
@@ -109,10 +129,10 @@
 						<li>Category:</li>
 						<li><a href="#">Headphones</a></li>
 						<li><a href="#">Accessories</a></li>
-					</ul>
+					</ul> --}}
 
 					<ul class="product-links">
-						<li>Share:</li>
+						<li>Chia sẻ:</li>
 						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
 						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
 						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
@@ -128,8 +148,8 @@
 				<div id="product-tab">
 					<!-- product tab nav -->
 					<ul class="tab-nav">
-						<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-						<li><a data-toggle="tab" href="#tab2">Details</a></li>
+						<li class="active"><a data-toggle="tab" href="#tab1">Mô tả</a></li>
+						<li><a data-toggle="tab" href="#tab2">Thông số</a></li>
 						<li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
 					</ul>
 					<!-- /product tab nav -->
@@ -139,8 +159,8 @@
 						<!-- tab1  -->
 						<div id="tab1" class="tab-pane fade in active">
 							<div class="row">
-								<div class="col-md-12">
-									<p>{{ $product->content }}</p>
+								<div class="col-md-12 content-img">
+									<p>{!! $product->content !!}</p>
 								</div>
 							</div>
 						</div>
@@ -149,9 +169,9 @@
 						<!-- tab2  -->
 						<div id="tab2" class="tab-pane fade in">
 							<div class="row">
-								@foreach (json_decode($product->config) as $config)
+								@foreach (json_decode($product->config) as $key => $value)
 								<div class="col-md-12">
-									<b>{{ $config->key }}</b> : {{ $config->value }} <br> 
+									<b>{{ $key }}</b> : {{ $value }} <br> 
 								</div>
 								@endforeach
 								{{-- <div class="col-md-12">
@@ -363,18 +383,19 @@
 			</div>
 
 			<!-- product -->
+			@foreach ($product_bot as $product)
 			<div class="col-md-3 col-xs-6">
 				<div class="product">
 					<div class="product-img">
-						<img src="./img/product01.png" alt="">
+						<img src="{{ asset("$product->image") }}" height="300px" alt="">
 						<div class="product-label">
 							<span class="sale">-30%</span>
 						</div>
 					</div>
 					<div class="product-body">
 						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+						<h3 class="product-name"><a href="{{ route('frontend.home.showProduct', $product->id) }}">{{$product->name}}</a></h3>
+						<h4 class="product-price">{{number_format($product->sale_price)}}VNĐ <del class="product-old-price">{{ number_format($product->origin_price) }}VNĐ</del></h4>
 						<div class="product-rating">
 						</div>
 						<div class="product-btns">
@@ -388,10 +409,12 @@
 					</div>
 				</div>
 			</div>
+			@endforeach
+			
 			<!-- /product -->
 
 			<!-- product -->
-			<div class="col-md-3 col-xs-6">
+			{{-- <div class="col-md-3 col-xs-6">
 				<div class="product">
 					<div class="product-img">
 						<img src="./img/product02.png" alt="">
@@ -420,65 +443,10 @@
 						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 					</div>
 				</div>
-			</div>
+			</div> --}}
 			<!-- /product -->
 
-			<div class="clearfix visible-sm visible-xs"></div>
-
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product03.png" alt="">
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star-o"></i>
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
-
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product04.png" alt="">
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
+			{{-- <div class="clearfix visible-sm visible-xs"></div> --}}
 
 		</div>
 		<!-- /row -->

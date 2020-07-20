@@ -15,7 +15,7 @@
     <div class="row mb-2">
         <div class="col-sm-6">
             @can('admins')
-            <h2 class="m-0 text-dark"><a href="{{ route('backend.product.create') }}" class="btn btn-success">Thêm mới sản phẩm</a></h2>
+            <h2 class="m-0 text-dark">Danh sách sản phẩm</h2>
             @endcan
         </div><!-- /.col -->
         <div class="col-sm-6">
@@ -30,8 +30,13 @@
 <!-- Content -->
 <div class="container-fluid">
     <!-- Main row -->
+    @if (session()->has('success'))
+    <div class="alert alert-success">{{ session()->get('success') }}</div>
+    @endif
+    @if (session()->has('error'))
+    <div class="alert alert-danger">{{ session()->get('error') }}</div>
+    @endif
     <div class="row">
-
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -49,13 +54,13 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th width="20%">Tên sản phẩm</th>
                                 {{-- <th>Thông số</th> --}}
-                                <th>Ảnh đại diện</th>
+                                <th width="20%">Ảnh đại diện</th>
                                 <th>Thời gian</th>
                                 <th>Status</th>
                                 <th>Chức năng</th>
@@ -71,7 +76,7 @@
                                     <b>{{ $config->key }}</b> : {{ $config->value }} <br> 
                                     @endforeach
                                 </td> --}}
-                                <td><img width="100px" height="100px" src='{{ asset("$product->image") }}' alt=""></td>  
+                                <td><img width="100px" height="100px" class="product-image" src='{{ asset("$product->image") }}' alt=""></td>  
                                 <td>{{ $product->updated_at }}</td>
                                 <td>
                                     @if ($product->status == 0)
@@ -84,16 +89,16 @@
                                 </td>
                                 <td>
                                     @can('update', $product)                                
-                                    <a href="{{ route('backend.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
+                                    <a href="{{ route('backend.product.edit', $product->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                                     @endcan
                                     
-                                    <a href="{{ route('frontend.home.showProduct', $product->id) }}" class="btn btn-secondary">Chi tiết</a>
-                                    <a href="{{ route('backend.product.showImages', $product->id)  }}" class="btn btn-primary">Xem ảnh</a>
+                                    <a href="{{ route('frontend.home.showProduct', $product->id) }}" class="btn btn-secondary"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                    <a href="{{ route('backend.product.showImages', $product->id)  }}" class="btn btn-primary"><i class="fa fa-picture-o" aria-hidden="true"></i></a>
                                     @can('admins')
                                     <form action="{{ route('backend.product.destroy', $product->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </form>
                                     @endcan
                                 </td>

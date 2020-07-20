@@ -1,3 +1,4 @@
+{{-- {{dd(Auth::user()->image)}} --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,14 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    .product-image{
+      max-width: 50% !important;
+      height: auto !important;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini">
   <!-- Site wrapper -->
@@ -139,7 +148,7 @@
             @csrf
             @method('POST')
             <button type="submit" class="btn btn-secondary">
-              Log out
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
             </button>
           </form>
         </li>
@@ -163,7 +172,7 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{{ asset('asset/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            <img src="{{ asset(Auth::user()->image) }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a href="#" class="d-block">
@@ -188,15 +197,18 @@
           </li> -->
           {{-- @if (Auth::user()->role == App\User::ROLE['admin'] || Auth::user()->role == App\User::ROLE['content']) --}}
           {{-- expr --}}
+          @if (Gate::allows('admins'))
           <li class="nav-item">
             <a href="{{ route('backend.dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Trang chủ
+                Thống Kê
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
+          @endif
+          @if (Gate::allows('admins'))
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
               <!-- <i class="nav-icon fas fa-copy"></i> -->
@@ -214,17 +226,16 @@
                   <p>Quản Lý chức năng</p>
                 </a>
               </li>
-              @if (Gate::allows('admins'))
+              
               <li class="nav-item">
                 <a href="{{ route('backend.product.create') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Thêm Mới Sản phẩm</p>
                 </a>
-              </li>
-              @endif
-              
+              </li>      
             </ul>
           </li>
+          @endif
           @if (Gate::allows('admins'))
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
@@ -276,24 +287,63 @@
             </ul>
           </li>
           @endif
-
-          <li class="nav-item has-treeview">
+          @if (Gate::allows('admins'))
+          <li class="nav-item">
             <a href="" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
+              <!-- <i class="nav-icon fas fa-tree"></i> -->
+              <i class="nav-icon fa fa-stack-overflow" aria-hidden="true"></i>
               <p>
-                Quản lý Order
+                Quản Lý Kho
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('backend.category.index') }}" class="nav-link">
+                <a href="{{ route('backend.product.stockindex') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Quản lý chức năng</p>
+                  <p>Quản Lý chức năng</p>
                 </a>
               </li>
             </ul>
           </li>
+          @endif
+          @if(Gate::allows('admins'))
+          <li class="nav-item has-treeview">
+            <a href="" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Quản lý Đơn hàng
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('backend.order.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Quản lý chức năng</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('backend.order.orderProcess') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Đơn hàng chờ xử lý</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('backend.order.orderSuccess') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Đơn hàng Thành công</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('backend.order.orderToday') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Đơn Thành công Trong ngày</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
           {{-- @endif --}}
           <li class="nav-item">
             <a href="" class="nav-link">
@@ -306,7 +356,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('home') }}" class="nav-link">
+                <a href="{{ route('home.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Home</p>
                 </a>

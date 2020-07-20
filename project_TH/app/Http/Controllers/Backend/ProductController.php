@@ -16,6 +16,7 @@ use App\Http\Requests\StoreProductRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -26,17 +27,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('updated_at', 'desc')->get();
-        // foreach ($products as $product) {
-        //     // $productConfigs = json_decode($product->config);
-        //     echo ($product->config);
-        // }
+        if (Gate::allows('admins')) {
+            $products = Product::orderBy('updated_at', 'desc')->paginate(5);
+        // $products = Product::paginate(5);
         // dd($products);
-        $products = Product::paginate(5);
-        return view("backend.products.index",[
-            'products' => $products,
-            // 'productConfigs' => $productConfigs
-        ]);
+            return view("backend.products.index",[
+                'products' => $products,
+            ]);
+        }else{
+            return abort('403');
+        }
     }
 
     /**
@@ -66,23 +66,25 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+    // StoreProduct
     {
-        // $json = $request->get('config', null);
-        // dd($json);
-        // $json = json_decode($json);
-        // // dd($json);
-        // foreach ($json as $value) {
-        //     echo $value->key . " : " . $value->value . "<br>";
+        $key = $request->key;
+        $value = $request->value;
+        $config = array_combine($key, $value);
+        // dd($config);
+        // $jsons = ;
+        // // dd(json_decode($jsons));
+        // foreach (json_decode($jsons) as $key => $value) {
+        //    echo $key . "=" . $value .  "<br>";
         // }
         // die();
-
         if (Gate::allows('admins')) {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $nameFile = $image->getClientOriginalName();
                 $url = Storage::url($nameFile);
             // dd($url);
-                Storage::disk('public')->putFileAs('products', $image, $nameFile);
+                Storage::disk('public')->putFileAs('', $image, $nameFile);
             }else{
                 dd('khong co anh');
             }
@@ -90,11 +92,13 @@ class ProductController extends Controller
         $product = new Product(); // Tao 1 doi tuong model Product -> $product co het thuoc tinh la cac key (truong cua bang)
         $product->name = $request->get('name', null);
         $product->image = $url;
+        $product->image_name = $nameFile;
         $product->origin_price = $request->get('origin_price', null);
         $product->sale_price = $request->get('sale_price', null);
+        $product->quantity = 0; // mặc định số lượng là 0
         $product->content = $request->get('content', null);
         // Luu Json
-        // $product->config = json_encode($request->get('config', null));
+        $product->config = json_encode($config);
         // dd($product->config);
         // $product->config = $request->get('config', null);
         if (Auth::check()) {
@@ -108,50 +112,17 @@ class ProductController extends Controller
         $product->policy = $request->get('policy', null);
         $product->brandname_id = $request->get('brandname_id', null);
         // dd($product);
-        $product->save();
+        $save = $product->save();
+        $save = 1;
+        if ($save) {
+            $request->session()->flash('success', 'created success');
+        }else{
+            $request->session()->flash('error', 'created fail');
+        }
         return redirect()->route('backend.product.index');
     }else{
         return abort('403');
     }
-        // $validate = $request->validate([
-        //     'name' => ['required', 'min:8', 'max:10'],
-        //     'origin_price' => ['required', 'numeric'],
-        //     'sale_price' => ['required', 'numeric'],
-        //     'content' => ['required'],
-        //     'status' => ['required']
-        // ]);
-
-        // $validator = Validator::make($request->all(),
-        //     [
-        //         'name' => ['required', 'min:8', 'max:30'],
-        //         'origin_price' => ['required', 'numeric'],
-        //         'sale_price' => ['required', 'numeric'],
-        //         'content' => ['required'],
-        //         'status' => ['required'],
-        //         'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:10000'],
-        //     ],
-        //     [
-        //         'required' => ':attribute Không được để trống',
-        //         'min' => ':attribute Phải lớn hơn :min',
-        //         'max' => ':attribute Phải ít hơn :max',
-        //         'numeric' => ':attribute Phải là dạng số',
-        //         'image' => 'Phải upload File có dạng là ảnh',
-        //         'mimes' => ':attribute Phải có đuôi là : jpeg, png, jpg'
-        //     ],
-        //     [
-        //         'name' => 'Tên sản phẩm',
-        //         'origin_price' => 'Giá gốc',
-        //         'sale_price' => 'Giá bán',
-        //         'content' => 'mô tả sản phẩm',
-        //         'image' => 'Ảnh'
-        //     ],
-        // );
-
-        // // dd($validator);
-        // if ($validator->errors()) {
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
         // if ($request->hasFile('images')) {
         //    // $path = Storage::disk('public')->putFile('images3', $request->file('images'));
         //     $images = $request->file('images');
@@ -219,6 +190,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         // dd(json_decode($product->config));
+        // dd(json_decode($product->config));
 
         // // Policies
         // $user = Auth::user();
@@ -250,7 +222,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request);
+        // dd(json_encode($request->config));
+        // dd($request->key);
+        $key = $request->key;
+        $value = $request->value;
+        $config = array_combine($key, $value);
+        // dd($config);
         $product = Product::find($id);
         if (Gate::allows('update-product', $product)){
             if ($request->hasFile('image')) {
@@ -259,15 +236,14 @@ class ProductController extends Controller
                 $url = Storage::url($nameFile);
             // dd($url);
                 Storage::disk('public')->putFileAs('', $image, $nameFile);
-            }else{
-                dd('khong co anh');
+                $product->image = $url;
+                $product->image_name = $nameFile;
             }
             $product->name = $request->get('name');
-            $product->image = $url;
             $product->origin_price = $request->get('origin_price');
             $product->sale_price = $request->get('sale_price');
             $product->content = $request->get('content');
-            $product->config = json_encode($request->get('config'));
+            $product->config = json_encode($config);
             $product->category_id = $request->get('category_id');
             $product->brandname_id = $request->get('brandname_id');
             $product->status = $request->get('status');
@@ -291,7 +267,12 @@ class ProductController extends Controller
     {
         if (Gate::allows('admins')) {
             $product = Product::find($id);
-        // dd($product->id);
+            // dd($product->image_name);
+            // dd(__DIR__ . "/" . $product->image_name);
+            // dd(Storage::disk('public')->delete($product->image_name));
+            if (Storage::disk('public')->exists($product->image_name)) {
+                Storage::disk('public')->delete($product->image_name);
+            }
             $product->delete();
             return redirect()->route('backend.product.index');
         }else{
@@ -349,5 +330,73 @@ class ProductController extends Controller
             }
             return redirect()->route('backend.product.showImages', $product_id);
         }
+    }
+
+    public function editImage($id){
+        $image = Image::find($id);
+        return view('backend.products.editImage', [
+            'image' => $image
+        ]);
+    }
+
+    public function store_image(Request $request, $id){
+        // dd(Image::find($id));
+        // dd($request->hasFile('image'));
+        if ($request->hasFile('image')) {
+            $image_info = $request->file('image');
+            // dd($image_info);
+            $nameFile = $image_info->getClientOriginalName();
+            // dd($nameFile);
+            $url = Storage::url($nameFile);
+            // dd($url);
+            Storage::disk('public')->putFileAs('', $image_info, $nameFile);
+        }else{
+            dd('Chua co anh');
+        }
+        $image = Image::find($id);
+        if (Storage::disk('public')->exists($image->name)) {
+            Storage::disk('public')->delete($image->name);
+            // dd('xoa thanh cong');
+        }
+        $product_id = $image->product_id;
+        $image->name = $nameFile;
+        $image->path = $url;
+        $image->save();
+        return redirect()->route("backend.product.showImages", $product_id);
+    }
+    //
+
+    //Quản lý kho
+    public function stockIndex(){
+        $products = Product::orderBy('updated_at', 'DESC')->get();
+        // dd($products);
+        return view('backend.products.stockIndex',[
+            'products' => $products
+        ]);
+    }
+
+    public function addQuantity($id){
+        // dd($id);
+        $product = Product::find($id);
+        return view('backend.products.addQuantity', [
+            'product' => $product
+        ]);
+    }
+
+    public function storeQuantity(Request $request, $id){
+        $validate = $request->validate([
+            'quantity' => ['required', 'numeric'],
+            'origin_price' => ['required', 'numeric'],
+            'sale_price' => ['required', 'numeric'],
+        ]);
+        $product = Product::find($id);
+        // dd($product);
+        $product->quantity = $product->quantity + $request->get('quantity');
+        // dd($product->quantity);
+        $product->status = $request->status;
+        $product->origin_price = $request->get('origin_price');
+        $product->sale_price = $request->get('sale_price');
+        $product->save();
+        return redirect()->route('backend.product.stockindex');
     }
 }

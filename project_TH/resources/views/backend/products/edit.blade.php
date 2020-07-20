@@ -79,7 +79,7 @@ Products
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Mô tả sản phẩm</label>
-                            <textarea class="textarea" id="summernote" name="content" value="{{ $product->content }}" placeholder="Place some text here"
+                            <textarea class="textarea" id="summernote" cols="30" rows="10" name="content" data-content="{{ $product->content }}" placeholder="Place some text here"
                                 style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                             </div>
                             @error('content')
@@ -95,22 +95,26 @@ Products
                                         Value:
                                     </div>
                                 </div>
-                                @for ($i=0; $i < count(json_decode($product->config)); $i++)
+                                @foreach (json_decode($product->config) as $key => $value)
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <input type="text" name="config[{{ $i }}][key]" class="form-control" value="{{ $product->config[$i]['key'] ?? '' }}">
+                                        <input type="text" name="key[]" class="form-control" value="{{ $key }}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" name="config[{{ $i }}][value]" class="form-control" value="{{ $product->config[$i]['value'] ?? '' }}">
+                                        <input type="text" name="value[]" class="mr-left form-control" value="{{ $value }}">
                                     </div>
+                                    {{-- <button class="add btn btn-primary" type="button">+</button>
+                                    <button class="minus btn btn-primary mr-left" data-id="div0" type="button">-</button> --}}
                                 </div>
-                                @endfor
+                                @endforeach                               
                             </div>
                             <div class="form-group">
                                 <label>Danh mục sản phẩm</label>
                                 <select class="form-control select2" name="category_id" style="width: 100%;">
                                     @foreach ($categories as $category)
+                                    @if ($category->depth != 0)
                                     <option value="{{ $category->id }}" @if($category->id == $product->category_id) selected @endif>{{ $category->name }}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -161,7 +165,7 @@ Products
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-default"><a href="{{ route('backend.product.index') }}">Huỷ bỏ</a></button>
+                            <button type="submit" class="btn btn-default"><a href="{{ route('backend.order.index') }}">Huỷ bỏ</a></button>
                             <button type="submit" class="btn btn-sucess">Sửa luôn</button>
                         </div>
                     </form>
@@ -181,6 +185,11 @@ Products
 @endsection
 @section('head-css')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<style>
+    .mr-left{
+        margin-left: 3px;
+    }
+</style>
 @endsection
 @section('foot-js')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>

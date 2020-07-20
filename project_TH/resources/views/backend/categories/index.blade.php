@@ -46,7 +46,7 @@ Categories
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -66,12 +66,12 @@ Categories
                                 <td>{{ $category->parent_id }}</td>
                                 <td>{{ $category->depth }}</td>
                                 <td>
-                                    <a href="{{ route('backend.category.showProducts', $category->id) }}" class="btn btn-secondary">Xem sản phẩm</a>
-                                    <a href="{{ route('backend.category.edit', $category->id) }}" class="btn btn-primary">Sửa Danh mục</a>
+                                    <a href="{{ route('backend.category.showProducts', $category->id) }}" class="btn btn-secondary"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                    <a href="{{ route('backend.category.edit', $category->id) }}" class="btn btn-primary"><i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                                     <form action="{{ route('backend.category.destroy', $category->id) }} }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </form>
                                 </td>
                                 </tr>

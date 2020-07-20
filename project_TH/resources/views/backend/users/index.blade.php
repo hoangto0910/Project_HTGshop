@@ -46,7 +46,7 @@ User
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -64,16 +64,16 @@ User
                                 <td>{{ $user->created_at }}</td>
                                 <td>{{ $user->updated_at }}</td>
                                 <td>
-                                    <a class="btn btn-secondary" href="{{ route('backend.user.showProducts', $user->id) }}">Xem sản phẩm</a>
+                                    <a class="btn btn-secondary" href="{{ route('backend.user.showProducts', $user->id) }}"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                                     @can('admins')
-                                    <a class="btn btn-primary" href="{{ route('backend.user.edit', $user->id) }}">Sửa Thông tin</a>
+                                    <a class="btn btn-primary" href="{{ route('backend.user.edit', $user->id) }}"><i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                                     @endcan
                                     
                                     @can('admins')
                                     <form action="{{ route('backend.user.destroy', $user->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </form>
                                     @endcan
                                 </td>

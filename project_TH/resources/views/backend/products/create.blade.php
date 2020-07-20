@@ -79,12 +79,13 @@ Products
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Mô tả sản phẩm</label>
-                            <textarea class="textarea" id="summernote" name="content" placeholder="Place some text here"
+                            <textarea class="textarea" id="summernote" cols="50" rows="50" name="content" placeholder="Place some text here"
                             style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                             @error('content')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="form-group">
                             <label>Config(Thông số sản phẩm)</label>
                             <div class="row">
@@ -95,7 +96,7 @@ Products
                                     Value:
                                 </div>
                             </div>
-                            @for ($i=0; $i <= 4; $i++)
+                            {{-- @for ($i=0; $i <= 4; $i++)
                             <div class="row">
                                 <div class="col-md-2">
                                     <input type="text" name="config[{{ $i }}][key]" class="form-control" value="{{ old('config['.$i.'][key]') }}">
@@ -104,13 +105,30 @@ Products
                                     <input type="text" name="config[{{ $i }}][value]" class="form-control" value="{{ old('config['.$i.'][value]') }}">
                                 </div>
                             </div>
-                            @endfor
+                            @endfor --}}
+                            <div id="config">
+                                <div id="div0" class="row">
+                                    <div class="col-md-2">
+                                        <input type="text" name="key[]" class="form-control" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" name="value[]" class="form-control" value="">
+                                    </div>
+                                    <button class="add btn btn-primary" type="button">+</button>
+                                    <button class="minus btn btn-primary mr-left" data-id="div0" type="button">-</button>                         
+                                </div>
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label>Danh mục sản phẩm</label>
                             <select class="form-control select2" name="category_id" style="width: 100%;">
                                 @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @if ($category->depth != 0)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
@@ -157,10 +175,10 @@ Products
                                 </div>
                             </div>
                             @error('image')
-                                <div class="text-danger">{{ $message }}</div>
+                            <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                     </div>
                     <!-- /.card-body -->
 
@@ -177,6 +195,11 @@ Products
 @endsection
 @section('head-css')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<style>
+    .mr-left{
+        margin-left: 3px;
+    }
+</style>
 @endsection
 @section('foot-js')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
@@ -185,5 +208,29 @@ Products
       $('#summernote').summernote();
       $("#summernote").summernote('editor.pasteHTML',$("#summernote").data("content"));
   });
+</script>
+<script>
+    $(document).ready(function(){
+        var index = 1;
+        $(".add").on('click', function(e){
+            e.preventDefault();
+            // alert('ss');
+            $("#config").append(`<div id="div`+ index +`" class="row">
+                <div class="col-md-2">
+                <input type="text" name="key[]" class="form-control" value="">
+                </div>
+                <div class="col-md-4">
+                <input type="text" name="value[]" class="form-control" value="">
+                </div>
+                <button class="add btn btn-primary" type="button">+</button>
+                <button class="minus btn btn-primary mr-left" data-id="div`+ index++ +`" type="button">-</button>                         
+                </div>`);
+            // console.log(index);
+        });
+        $(document).on("click",".minus",function () {
+            let id = $(this).data("id");
+            $("#"+id).remove();
+        });
+    })
 </script>
 @endsection

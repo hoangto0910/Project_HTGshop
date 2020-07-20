@@ -50,16 +50,21 @@ Show images
                         <thead>
                             <tr>
                                 <th>Tên ảnh</th>
-                                <th>Product_id</th>
-                                <th>Ảnh</th>
+                                {{-- <th>Product_id</th> --}}
+                                <th width="40%">Ảnh</th>
+                                <th>Chức năng</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($images as $image)
                             <tr>
                                 <td>{{ $image->name }}</td>
-                                <td>{{ $image->product_id }}</td>
-                                <td><img width="50%" height="50%" src='{{ asset("$image->path") }}' alt=""></td>
+                                {{-- <td>{{ $image->product_id }}</td> --}}
+                                <td><img class="product-image" src='{{ asset("$image->path") }}' alt=""></td>
+                                <td>
+                                    <a href="{{ route('backend.product.editImage', $image->id) }}" class="btn btn-primary">Sửa ảnh</a>
+                                    <a href="" class="btn btn-danger">Xóa ảnh</a>
+                                </td>
                             </tr>
                             @endforeach
                             @can('admins')

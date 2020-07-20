@@ -31,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = "/auth/login"; // *****
+    protected $redirectTo = RouteServiceProvider::ADMIN; // *****
 
     /**
      * Create a new controller instance.
@@ -109,4 +109,5 @@ class RegisterController extends Controller
         ? new Response('', 201)
         : redirect($this->redirectPath());
     }
+
 }
